@@ -1,23 +1,28 @@
-certifi==2021.10.8
-chardet==3.0.4
-click==8.0.3
-Flask==2.0.2
-googletrans==4.0.0rc1
-h11==0.9.0
-h2==3.2.0
-hpack==3.0.0
-hstspreload==2021.10.1
-httpcore==0.9.1
-httpx==0.13.3
-hyperframe==5.2.0
-idna==2.10
-itsdangerous==2.0.1
-Jinja2==3.0.2
-MarkupSafe==2.0.1
-numpy==1.21.3
-opencv-python==4.5.4.58
-Pillow==8.4.0
-pytesseract==0.3.8
-rfc3986==1.5.0
-sniffio==1.2.0
-Werkzeug==2.0.2
+Package       Version
+------------- ---------
+certifi       2021.10.8
+chardet       3.0.4
+click         8.0.3
+Flask         2.0.2
+googletrans   4.0.0rc1
+gunicorn      20.1.0
+h11           0.9.0
+h2            3.2.0
+hpack         3.0.0
+hstspreload   2021.10.1
+httpcore      0.9.1
+httpx         0.13.3
+hyperframe    5.2.0
+idna          2.10
+itsdangerous  2.0.1
+Jinja2        3.0.2
+MarkupSafe    2.0.1
+numpy         1.21.3
+opencv-python 4.5.4.58
+Pillow        8.4.0
+pip           21.2.4
+pytesseract   0.3.8
+rfc3986       1.5.0
+setuptools    57.4.0
+sniffio       1.2.0
+Werkzeug      2.0.2
