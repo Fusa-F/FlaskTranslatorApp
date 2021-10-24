@@ -50,13 +50,13 @@ def read_image_text():
 # ------------- app -------------
 from flask import Flask, request, make_response, render_template, url_for
 
-api = Flask(__name__)
+app = Flask(__name__)
 
-@api.route('/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
-@api.route('/capture_img', methods=['POST'])
+@app.route('/capture_img', methods=['POST'])
 def capture_img():
     msg = save_img(request.form["img"])
     print(msg)
@@ -67,4 +67,4 @@ def capture_img():
 # ------------- app -------------
 
 if __name__ == "__main__":
-    api.run(debug=True, host='0.0.0.0', port=8000, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8000, threaded=True)
