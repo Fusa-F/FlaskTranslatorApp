@@ -1,0 +1,2 @@
+# FlaskTranslatorApp
+FlaskでApp練習
