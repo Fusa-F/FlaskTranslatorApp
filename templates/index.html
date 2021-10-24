@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="lang">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      /* canvasは非表示にする */
+      #canvas {
+        display: none !important;
+      }
+
+      .btn-area {
+        text-align: center;
+      }
+      #btn {
+        display: block;
+        width: 50%;
+        margin: 0 auto;
+      }
+
+      #txt {
+        font-weight: bold;
+      }
+    </style>
+
+    <title>英文よみとりくん</title>
+  </head>
+  <body>
+    <div id="container">
+      <video id="video" width="640" height="480" autoplay playsinline></video>
+      <canvas id="canvas" class="canvas-wrapper"></canvas>
+      <div class="btn-area_small">
+        <input id="camera-btn" type="button" value="外カメラにする" />
+      </div>
+      <div class="btn-area">
+        <input id="btn" type="button" value="よみとり！！！！！！" />
+        <div id="txt">
+          翻訳したいテキストをカメラに向けてから,↑のボタンを押してね
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var video = document.getElementById("video");
+      // getUserMedia()でカメラ映像の取得
+      var media = navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" },
+      });
+
+      var cameraBtn = document.getElementById("camera-btn");
+      var frontCamera = true;
+
+      function changeCamera() {
+        // 内カメ だったら 外カメにする
+        if (frontCamera) {
+          var media = navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: "environment" } },
+          });
+          cameraBtn.value = "内カメラにする";
+        }
+        // 外カメ だったら 内カメにする
+        else {
+          var media = navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+          });
+          cameraBtn.value = "外カメラにする";
+        }
+        frontCamera = frontCamera ? false : true;
+      }
+
+      cameraBtn.addEventListener("click", changeCamera);
+
+      //リアルタイム再生（ストリーミング）を行うためにビデオタグに流し込む
+      media.then((stream) => {
+        video.srcObject = stream;
+      });
+
+      var canvas = document.getElementById("canvas");
+      canvas.setAttribute("width", video.width);
+      canvas.setAttribute("height", video.height);
+
+      video.addEventListener(
+        "timeupdate",
+        function () {
+          var context = canvas.getContext("2d");
+          context.drawImage(video, 0, 0, video.width, video.height);
+        },
+        true
+      );
+
+      // ボタンでキャプチャ取得を実行
+      document.getElementById("btn").addEventListener("click", executeCapture);
+
+      function executeCapture() {
+        context = canvas.getContext("2d");
+        // 取得したbase64データのヘッドを取り除く
+        var img_base64 = canvas.toDataURL("image/jpeg").replace(/^.*,/, "");
+        captureImg(img_base64);
+      }
+
+      var xhr = new XMLHttpRequest();
+
+      // キャプチャ画像データ(base64)をPOST
+      function captureImg(img_base64) {
+        const body = new FormData();
+        body.append("img", img_base64);
+        xhr.open("POST", "http://localhost:8000/capture_img", true);
+        xhr.onload = () => {
+          console.log(xhr.responseText);
+          document.getElementById("txt").innerHTML = xhr.responseText;
+        };
+        xhr.send(body);
+      }
+    </script>
+  </body>
+</html>
