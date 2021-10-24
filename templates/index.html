@@ -42,29 +42,38 @@
     </div>
 
     <script>
+      var STREAM = null;
       var video = document.getElementById("video");
       // getUserMedia()でカメラ映像の取得
       var media = navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
       });
+      //リアルタイム再生（ストリーミング）を行うためにビデオタグに流し込む
+      media.then((stream) => {
+        video.srcObject = stream;
+        STREAM = stream;
+      });
 
       var cameraBtn = document.getElementById("camera-btn");
       var frontCamera = true;
-      var STREAM = null;
 
       function changeCamera() {
         // 内カメ だったら 外カメにする
         if (frontCamera) {
           try {
-            var media = navigator.mediaDevices.getUserMedia({
-              video: { facingMode: { exact: "environment" } },
-            });
-
             if (STREAM !== null) {
               STREAM.getVideoTracks().forEach((camera) => {
                 camera.stop();
               });
             }
+
+            var media = navigator.mediaDevices.getUserMedia({
+              video: { facingMode: { exact: "environment" } },
+            });
+            media.then((stream) => {
+              video.srcObject = stream;
+              STREAM = stream;
+            });
 
             cameraBtn.value = "内カメラにする";
           } catch (error) {
@@ -73,15 +82,19 @@
         }
         // 外カメ だったら 内カメにする
         else {
-          var media = navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "user" },
-          });
-
           if (STREAM !== null) {
             STREAM.getVideoTracks().forEach((camera) => {
               camera.stop();
             });
           }
+
+          var media = navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+          });
+          media.then((stream) => {
+            video.srcObject = stream;
+            STREAM = stream;
+          });
 
           cameraBtn.value = "外カメラにする";
         }
@@ -89,12 +102,6 @@
       }
 
       cameraBtn.addEventListener("click", changeCamera);
-
-      //リアルタイム再生（ストリーミング）を行うためにビデオタグに流し込む
-      media.then((stream) => {
-        video.srcObject = stream;
-        STREAM = stream;
-      });
 
       var canvas = document.getElementById("canvas");
       canvas.setAttribute("width", video.width);

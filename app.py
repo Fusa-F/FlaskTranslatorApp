@@ -25,7 +25,7 @@ def save_img(img_base64):
 from PIL import Image
 import pytesseract
 # tesseractコマンドのインストールパス
-pytesseract.tesseract_cmd = './tesseract/4.1.1/bin/tesseract'
+pytesseract.tesseract_cmd = '../tesseract/4.1.1/bin/tesseract'
 
 from googletrans import Translator
 import io
