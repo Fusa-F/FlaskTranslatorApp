@@ -54,10 +54,14 @@
       function changeCamera() {
         // 内カメ だったら 外カメにする
         if (frontCamera) {
-          var media = navigator.mediaDevices.getUserMedia({
-            video: { facingMode: { exact: "environment" } },
-          });
-          cameraBtn.value = "内カメラにする";
+          try {
+            var media = navigator.mediaDevices.getUserMedia({
+              video: { facingMode: { exact: "environment" } },
+            });
+            cameraBtn.value = "内カメラにする";
+          } catch (error) {
+            cameraBtn.value = "外カメラのみ";
+          }
         }
         // 外カメ だったら 内カメにする
         else {
@@ -105,7 +109,11 @@
       function captureImg(img_base64) {
         const body = new FormData();
         body.append("img", img_base64);
-        xhr.open("POST", "http://localhost:8000/capture_img", true);
+        xhr.open(
+          "POST",
+          "https://ancient-bastion-15958.herokuapp.com/capture_img",
+          true
+        );
         xhr.onload = () => {
           console.log(xhr.responseText);
           document.getElementById("txt").innerHTML = xhr.responseText;
